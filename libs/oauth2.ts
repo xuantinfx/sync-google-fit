@@ -1,4 +1,4 @@
-import {google} from "googleapis";
+import { google } from "googleapis";
 import scopes from "../config/scopes";
 import * as jwt from 'jsonwebtoken';
 // @ts-ignore

@@ -49,8 +49,26 @@ export const getOauth2Client = async (refresh_token) => {
   return localOauth2Client;
 };
 
-export const getGoogleObject = (oauth2ClientObject) => {
-  return  require('googleapis').google.options({
-    auth: oauth2ClientObject,
+export const getAccessToken = async (refresh_token: string) => {
+  const localOauth2Client = new google.auth.OAuth2(
+    keys.client_id,
+    keys.client_secret,
+    keys.redirect_uris[0]
+  );
+
+  localOauth2Client.setCredentials({
+    refresh_token,
   });
+
+  const res = await localOauth2Client.getAccessToken();
+
+  return res.token;
+};
+
+export const getGoogleObject = (oauth2ClientObject) => {
+  const google = require('googleapis').google;
+  google.options({
+      auth: oauth2ClientObject,
+  });
+  return google;
 };

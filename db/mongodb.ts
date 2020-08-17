@@ -9,6 +9,7 @@ export const mongoDb: { db?: Db } = {};
 
 export const collections = {
   users: 'users',
+  dailyStepData: 'dailyStepData',
 };
 
 

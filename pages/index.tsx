@@ -5,6 +5,7 @@ import { getLoginUrl } from '../libs/oauth2';
 import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import * as jwt from 'jsonwebtoken';
+import syncDailyData from "../jobs/syncDailyData";
 
 export default function Home({ loginUrl }) {
   const router = useRouter();
@@ -71,6 +72,7 @@ export default function Home({ loginUrl }) {
 // It won't be called on client-side, so you can even do
 // direct database queries. See the "Technical details" section.
 export async function getStaticProps() {
+  await syncDailyData('raw:com.google.step_count.delta:com.fossil.wearables.fossil:Fossil Hybrid:UNKNOWN:D0F00119RW:');
   return {
     props: {
       loginUrl: getLoginUrl(),

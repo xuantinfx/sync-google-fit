@@ -1,7 +1,7 @@
 import { Db, MongoClient } from 'mongodb';
 import dbConfig from '../config/dbconfig';
 
-const uri = `mongodb://${dbConfig.host}:${dbConfig.host}`;
+const uri = dbConfig.connectionString;
 
 const client = new MongoClient(uri, {  useUnifiedTopology: true });
 
@@ -11,15 +11,12 @@ export const collections = {
   users: 'users',
 };
 
-// Database Name
-
-const dbName = dbConfig.dbName;
 
 export const initDb = async () => {
   try {
     await client.connect();
 
-    mongoDb.db = client.db(dbName);
+    mongoDb.db = client.db();
     console.log('Connect mongodb successfully!');
 
   } catch (e) {

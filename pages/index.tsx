@@ -45,9 +45,9 @@ export default function Home({ loginUrl }) {
             <Button type="primary" danger size="large">Login with Google</Button>
           </a>
         ) : (
-          <div>
+          <div style={{ display: "flex", flexDirection: "column"}}>
             <h3>Welcome {currentUser.name}</h3>
-            <img src={currentUser.picture}/>
+            <img src={currentUser.picture} style={{ width: '100%' }} alt="profile"/>
           </div>
         )}
       </main>

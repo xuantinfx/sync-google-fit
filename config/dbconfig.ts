@@ -1,5 +1,3 @@
 export default {
-  host: 'localhost',
-  port: 27017,
-  dbName: 'sync-google-fit',
+  connectionString: 'mongodb://localhost:27017/sync-google-fit',
 }

@@ -3,14 +3,16 @@ import momentTZ from 'moment-timezone';
 import { getDailyFitnessData } from "../libs/googleFit";
 import { UserDataType } from '../data';
 import _ from 'lodash';
+import dataSource from '../config/dataSource';
+import { Moment } from "moment";
 
 const timeZone = 'Asia/Ho_Chi_Minh';
 const duration = 86400000;
 
-const getLastFriday = () => {
-  const today = momentTZ().tz(timeZone).startOf("day");
+const getLastFriday = (today?: Moment) => {
+  const startOfToday = today ? today.clone().startOf("day") : momentTZ().tz(timeZone).startOf("day");
   const startOfWeek = momentTZ().tz(timeZone).startOf('week');
-  const duration = today.diff(startOfWeek);
+  const duration = startOfToday.diff(startOfWeek);
   const diffDay = duration / 86400000;
   // case friday, saturday
   if (diffDay > 5) {
@@ -20,14 +22,13 @@ const getLastFriday = () => {
   }
 };
 
-const syncDailyData = async (dataSource: string) => {
-  await initDb();
+const syncDailyDataByDataSource = async (dataSource: string, today?: Moment) => {
   const { db } = mongoDb;
   if (db) {
     const dailyStepDataCollection = await db.collection(collections.dailyStepData);
     const usersCollection = await db.collection(collections.users);
     const allUsers = (await usersCollection.find().toArray()) as UserDataType[];
-    const lastFriday = getLastFriday();
+    const lastFriday = getLastFriday(today);
     const nextFriday = lastFriday.clone().add(7, "day");
     const lastFridayValue = lastFriday.valueOf();
     const nextFridayValue = nextFriday.valueOf();
@@ -41,27 +42,36 @@ const syncDailyData = async (dataSource: string) => {
         dataSource,
         86400000
       );
-      const bucket = dailyFitnessData.bucket;
-      for (let j = 0; j < bucket.length; j++) {
-        const buck = bucket[j];
-        const step = _.get(buck, 'dataset.0.point.0.value.0.intVal');
-        if (step !== undefined) {
-          const dataWillSave = {
-            userId: user._id,
-            startDate: buck.startTimeMillis,
-            endDate: buck.endTimeMillis,
-            duration: duration,
-            step: _.get(buck, 'dataset.0.point.0.value.0.intVal', 0),
-            dataSource: dataSource,
-          };
-          await dailyStepDataCollection.findOneAndReplace(
-            { userId: user._id, startDate: buck.startTimeMillis },
-            dataWillSave,
-            { upsert: true },
-          );
+      if (dailyFitnessData) {
+        const bucket = dailyFitnessData.bucket;
+        for (let j = 0; j < bucket.length; j++) {
+          const buck = bucket[j];
+          const step = _.get(buck, 'dataset.0.point.0.value.0.intVal');
+          if (step !== undefined) {
+            const dataWillSave = {
+              userId: user._id,
+              startDate: buck.startTimeMillis,
+              endDate: buck.endTimeMillis,
+              duration: duration,
+              step: _.get(buck, 'dataset.0.point.0.value.0.intVal', 0),
+              dataSource: dataSource,
+            };
+            await dailyStepDataCollection.findOneAndReplace(
+              { userId: user._id, startDate: buck.startTimeMillis },
+              dataWillSave,
+              { upsert: true },
+            );
+          }
         }
       }
     }
+  }
+};
+
+const syncDailyData = async (today?: Moment) => {
+  await initDb();
+  for (let i = 0; i < dataSource.length; i++) {
+    await syncDailyDataByDataSource(dataSource[i], today);
   }
 };
 

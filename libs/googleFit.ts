@@ -9,25 +9,29 @@ export const getDailyFitnessData = async (
   durationMillis = 86400000
 ) => {
   const accessToken = await getAccessToken(refresh_token);
-  const res = await axios({
-    url: 'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    data: {
-      "aggregateBy": [
-        {
-          "dataTypeName": "com.google.step_count.delta",
-          "dataSourceId": dataSourceId
-        }
-      ],
-      "bucketByTime": {
-        "durationMillis": durationMillis
+  try {
+    const res = await axios({
+      url: 'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       },
-      "startTimeMillis": startTimeMillis,
-      "endTimeMillis": endTimeMillis
-    }
-  });
-  return res.data;
+      data: {
+        "aggregateBy": [
+          {
+            "dataTypeName": "com.google.step_count.delta",
+            "dataSourceId": dataSourceId
+          }
+        ],
+        "bucketByTime": {
+          "durationMillis": durationMillis
+        },
+        "startTimeMillis": startTimeMillis,
+        "endTimeMillis": endTimeMillis
+      }
+    });
+    return res.data;
+  } catch (e) {
+    return undefined;
+  }
 };

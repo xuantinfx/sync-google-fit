@@ -46,8 +46,8 @@ const ProfileAtHome: FC<ProfileAtHomePropsType> = ({ currentUser }) => {
       <div className={styles.profileNameAndAvatar}>
         <h3 className={styles.profileName}>Welcome {currentUser.name}</h3>
         <Avatar src={currentUser.picture} size={100}/>
+        {isLoadingGetDailyStep && (<LoadingOutlined style={{ fontSize: 30, marginTop: 20 }} />)}
       </div>
-      {isLoadingGetDailyStep && (<LoadingOutlined style={{ fontSize: 30 }} />)}
       {!isLoadingGetDailyStep && dailyStepOfCurrentWeek && (
         <div>
           <h3 className={styles.totalText}>Total {total.toLocaleString()} steps</h3>

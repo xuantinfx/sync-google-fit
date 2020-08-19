@@ -39,8 +39,8 @@ const Leaderboard: FC<LeaderboardPropsType> = () => {
     <div>
       <div className={styles.leaderboardHeader}>
         <h3>Leaderboard</h3>
+        {isLoadingLeaderboard && (<LoadingOutlined style={{ fontSize: 30 }} />)}
       </div>
-      {isLoadingLeaderboard && (<LoadingOutlined style={{ fontSize: 30 }} />)}
       {!isLoadingLeaderboard && leaderboard && (
         <div className={styles.leaderboardContent}>
           {map(leaderboard, (d: LeaderboardDataType) => (

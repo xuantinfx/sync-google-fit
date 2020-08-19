@@ -13,8 +13,8 @@ export interface UserDataType {
 export interface DailyFitnessData {
   userId: string;
   email: string;
-  startDate: number;
-  endDate: number;
+  startDate: string;
+  endDate: string;
   duration: number;
   step: number;
   dataSource: number;

@@ -64,7 +64,6 @@ export default function Home({ loginUrl }) {
 // It won't be called on client-side, so you can even do
 // direct database queries. See the "Technical details" section.
 export async function getStaticProps() {
-
   return {
     props: {
       loginUrl: getLoginUrl(),

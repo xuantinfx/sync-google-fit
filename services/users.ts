@@ -1,30 +1,20 @@
-import {collections, initDb, mongoDb} from '../db/mongodb';
+import {collections, getDb } from '../db/mongodb';
 import { UserDataType } from '../data';
+import {getLastFriday} from "../utils/dateTimeUtils";
 
-initDb().then().catch();
-
-export const writeUser = async (user: UserDataType, i?: number) => {
-    const db = mongoDb.db;
+export const writeUser = async (user: UserDataType) => {
+    const db = await getDb();
     if (db) {
         console.log('write', user);
         const usersCollection = db.collection(collections.users);
         await usersCollection.findOneAndReplace({ email: user.email }, user, { upsert: true });
         return user;
-    } else {
-      if (i === undefined || i < 5) {
-        console.log('Retry write', user);
-        setTimeout(() => {
-          writeUser(user, i !== undefined ? i + 1 : 0);
-        }, 1000);
-      } else {
-        console.log('Reject write because cannot connect to db', user);
-      }
     }
     return undefined;
 };
 
 export const getListUsers = async () => {
-    const db = mongoDb.db;
+    const db = await getDb();
     if (db) {
         const usersCollection = db.collection(collections.users);
         return await usersCollection.find({}).toArray();
@@ -33,9 +23,18 @@ export const getListUsers = async () => {
 };
 
 export const getUserByEmail = async (email: string) => {
-  const db = mongoDb.db;
+  const db = await getDb();
   if (db) {
     const usersCollection = db.collection(collections.users);
     return await usersCollection.findOne({ email });
+  }
+};
+
+export const getDailyStepOfCurrentWeekByEmail = async (email: string) => {
+  const db = await getDb();
+  if (db) {
+    const dailyStepDataCollection = db.collection(collections.dailyStepData);
+    const lastFriday = getLastFriday();
+    return dailyStepDataCollection.find({ email, startDate: { $gte: `${lastFriday.valueOf()}` } }).toArray();
   }
 };

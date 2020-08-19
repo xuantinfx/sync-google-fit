@@ -5,13 +5,23 @@ const uri = dbConfig.connectionString;
 
 const client = new MongoClient(uri, {  useUnifiedTopology: true });
 
-export const mongoDb: { db?: Db } = {};
+const mongoDb: { db?: Db } = {};
 
 export const collections = {
   users: 'users',
   dailyStepData: 'dailyStepData',
 };
 
+export const getDb = async () => {
+  if (mongoDb.db) {
+    return mongoDb.db;
+  } else {
+    await client.connect();
+    console.log('Re Connect mongodb successfully!');
+    mongoDb.db = await client.db();
+    return mongoDb.db;
+  }
+};
 
 export const initDb = async () => {
   try {

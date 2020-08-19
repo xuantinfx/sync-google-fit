@@ -11,7 +11,7 @@ const handle = app.getRequestHandler();
 
 initDb().then();
 
-const scheduleCronJob = '49 13 * * *';
+const scheduleCronJob = '0 8 * * *';
 
 const job = new CronJob(scheduleCronJob, async () => {
   console.log('Begin sync data from Google Fit');

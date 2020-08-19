@@ -1,10 +1,25 @@
+import syncDailyData from "./jobs/syncDailyData";
+const { initDb } = require('./db/mongodb');
 const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');
+const CronJob = require('cron').CronJob;
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
+
+initDb().then();
+
+const scheduleCronJob = '49 13 * * *';
+
+const job = new CronJob(scheduleCronJob, async () => {
+  console.log('Begin sync data from Google Fit');
+  await syncDailyData();
+}, null, true, 'Asia/Ho_Chi_Minh');
+job.start();
+
+console.log('Start job at', scheduleCronJob);
 
 app.prepare().then(() => {
   createServer((req, res) => {

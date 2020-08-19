@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "dev": "ts-node --project tsconfig.server.json server.ts",
+    "build": "next build && tsc --project tsconfig.server.json",
+    "start": "yarn build && cross-env NODE_ENV=production node dist/server.js"
   },
   "dependencies": {
     "@types/mongodb": "^3.5.26",
+    "cross-env": "^5.2.1",
     "antd": "^4.5.4",
     "axios": "^0.19.2",
     "cron": "^1.8.2",
@@ -20,7 +21,8 @@
     "mongodb": "^3.6.0",
     "next": "9.5.2",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "ts-node": "^8.10.2"
   },
   "devDependencies": {
     "@types/node": "^14.0.27",

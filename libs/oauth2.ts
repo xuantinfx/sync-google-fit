@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import scopes from "../config/scopes";
 import * as jwt from 'jsonwebtoken';
 // @ts-ignore
-import credentials from '../config/credential';
+import credentials from '../public/credential.json';
 
 const keys = credentials.web;
 

@@ -3,12 +3,22 @@ import { UserDataType } from '../data';
 
 initDb().then().catch();
 
-export const writeUser = async (user: UserDataType) => {
+export const writeUser = async (user: UserDataType, i?: number) => {
     const db = mongoDb.db;
     if (db) {
+        console.log('write', user);
         const usersCollection = db.collection(collections.users);
         await usersCollection.findOneAndReplace({ email: user.email }, user, { upsert: true });
         return user;
+    } else {
+      if (i === undefined || i < 5) {
+        console.log('Retry write', user);
+        setTimeout(() => {
+          writeUser(user, i !== undefined ? i + 1 : 0);
+        }, 1000);
+      } else {
+        console.log('Reject write because cannot connect to db', user);
+      }
     }
     return undefined;
 };

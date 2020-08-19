@@ -72,8 +72,6 @@ export default function Home({ loginUrl }) {
 // It won't be called on client-side, so you can even do
 // direct database queries. See the "Technical details" section.
 export async function getStaticProps() {
-  await syncDailyData();
-  // console.log(await getAccessToken("1//0gCgg5FzZszXjCgYIARAAGBASNwF-L9IrHvWHLgD0YXU-i258vfBRdL413y4e6vCBhTjwZbA9vu_SGbNJxvfonRNHVJ1NtsWyHjU"));
   return {
     props: {
       loginUrl: getLoginUrl(),

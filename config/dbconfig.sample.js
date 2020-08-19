@@ -1,3 +1,3 @@
 export default {
-  connectionString: process.env.MONGODB_CONNECTION_STRING,
+  connectionString: 'mongodb://localhost:27017/sync-google-fit',
 }

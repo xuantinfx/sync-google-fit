@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ts-node --project tsconfig.server.json server.ts",
     "build": "next build && tsc --project tsconfig.server.json",
-    "start": "npm build && cross-env NODE_ENV=production node dist/server.js"
+    "start": "npm run build && cross-env NODE_ENV=production node dist/server.js"
   },
   "dependencies": {
     "@types/mongodb": "^3.5.26",

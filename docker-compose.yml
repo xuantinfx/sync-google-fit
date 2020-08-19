@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  sync-google-fit:
+    build:
+      context: ./
+    ports:
+      - 3000:3000
+    restart: unless-stopped

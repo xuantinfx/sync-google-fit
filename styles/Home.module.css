@@ -50,6 +50,13 @@
   text-align: center;
   font-size: 30px;
 }
+.leaderboardHeader h3 {
+  margin-bottom: 0;
+}
+
+.leaderboardHeader  p {
+  font-size: 0.4em;
+}
 
 .leaderboardItem {
   display: flex;

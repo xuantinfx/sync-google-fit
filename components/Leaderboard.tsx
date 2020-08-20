@@ -5,6 +5,7 @@ import {notification, Avatar} from "antd";
 import {LoadingOutlined} from "@ant-design/icons/lib";
 import map from "lodash/map";
 import styles from '../styles/Home.module.css'
+import {getLastFriday} from "../utils/dateTimeUtils";
 
 interface LeaderboardPropsType {
 
@@ -35,10 +36,14 @@ const Leaderboard: FC<LeaderboardPropsType> = () => {
     getLeaderboard().then();
   }, []);
 
+  const lastFriday = getLastFriday();
+  const nextFriday = lastFriday.clone().add(7, "day").subtract(1, "second");
+
   return (
     <div>
       <div className={styles.leaderboardHeader}>
         <h3>Leaderboard</h3>
+        <p>{`${lastFriday.format('ddd DD/MM')} - ${nextFriday.format('ddd DD/MM')}`}</p>
         {isLoadingLeaderboard && (<LoadingOutlined style={{ fontSize: 30 }} />)}
       </div>
       {!isLoadingLeaderboard && leaderboard && (

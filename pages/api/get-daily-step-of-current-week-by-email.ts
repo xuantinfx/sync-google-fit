@@ -1,4 +1,5 @@
 import {getDailyStepOfCurrentWeekByEmail} from "../../services/users";
+import _ from 'lodash';
 
 export default async (req, res) => {
     const {
@@ -9,7 +10,7 @@ export default async (req, res) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.send({
-            data: dailyStepByEmail,
+            data: _.orderBy(dailyStepByEmail, 'startDate', 'asc'),
         });
     } else {
         res.send({

@@ -46,7 +46,7 @@ export default function Home({ loginUrl }) {
         </Button>
       )}
       <h1 className={styles.title}>
-        Welcome to Sync Google Fit Project
+        Welcome to Health Project
       </h1>
 
       {!currentUser ? (

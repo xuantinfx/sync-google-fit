@@ -46,6 +46,8 @@ export const getLeaderBoard = async () => {
     const dailyStepDataCollection = db.collection(collections.dailyStepData);
     const usersCollection = db.collection(collections.users);
     const lastFriday = getLastFriday();
+    const allUser = await usersCollection.find().toArray();
+
     const allDailyStep = await dailyStepDataCollection.find({
       startDate: { $gte: `${lastFriday.valueOf()}` },
     }).toArray();
@@ -54,8 +56,6 @@ export const getLeaderBoard = async () => {
     _.forEach(stepsByUser, (val: DailyFitnessData[], key: string) => {
       stepByUser[key] = _.reduce(val, (sum: number, fitnessData: DailyFitnessData) => sum += fitnessData.step, 0);
     });
-    const allUserEmails = Object.keys(stepByUser);
-    const allUser = await usersCollection.find({ email: { $in: allUserEmails }}).toArray();
 
     return _.orderBy(_.map(allUser, (user: UserDataType) => (
       {
@@ -65,7 +65,7 @@ export const getLeaderBoard = async () => {
         given_name: user.given_name,
         family_name: user.family_name,
         picture: user.picture,
-        totalStep: stepByUser[user.email],
+        totalStep: stepByUser[user.email] || 0,
       }
     )), ['totalStep'], ['desc']);
   }

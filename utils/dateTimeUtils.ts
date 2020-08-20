@@ -7,8 +7,8 @@ export const getLastFriday = (today?: Moment) => {
   const startOfWeek = momentTZ().tz(timeZone).startOf('week');
   const duration = startOfToday.diff(startOfWeek);
   const diffDay = duration / 86400000;
-  // case friday, saturday
-  if (diffDay > 5) {
+  // case saturday move to next week
+  if (diffDay > 6) {
     return startOfWeek.add(5, 'day');
   } else {
     return startOfWeek.subtract(2, 'day');

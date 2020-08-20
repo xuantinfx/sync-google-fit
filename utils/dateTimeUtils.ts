@@ -8,7 +8,7 @@ export const getLastFriday = (today?: Moment) => {
   const duration = startOfToday.diff(startOfWeek);
   const diffDay = duration / 86400000;
   // case saturday move to next week
-  if (diffDay > 6) {
+  if (diffDay > 5) {
     return startOfWeek.add(5, 'day');
   } else {
     return startOfWeek.subtract(2, 'day');

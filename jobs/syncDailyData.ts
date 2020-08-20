@@ -57,7 +57,8 @@ const syncDailyDataByDataSource = async (dataSource: string, today?: Moment) => 
     const allUsers = (await usersCollection.find().toArray()) as UserDataType[];
     const lastFriday = getLastFriday(today);
     const nextFriday = lastFriday.clone().add(7, "day");
-    const lastFridayValue = lastFriday.valueOf();
+    // Because Friday must to sync thursday
+    const lastFridayValue = lastFriday.subtract(1, "day").valueOf();
     const nextFridayValue = nextFriday.valueOf();
 
     for (let i = 0; i < allUsers.length; i++) {

@@ -29,13 +29,22 @@ export default function Home({ loginUrl }) {
     }
   }, []);
 
+  const onClickLogout = () => {
+    localStorage.removeItem('id_token');
+    setCurrentUser(undefined);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
         <title>KiteMetric Helper</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      {currentUser && (
+        <Button type="link" className={styles.logoutButton} onClick={onClickLogout}>
+          Logout
+        </Button>
+      )}
       <h1 className={styles.title}>
         Welcome to Sync Google Fit Project
       </h1>

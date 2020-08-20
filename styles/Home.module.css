@@ -7,6 +7,10 @@
   /*align-items: center;*/
 }
 
+.logoutButton {
+  text-align: right;
+}
+
 .loginButtonContainer {
   flex: 1;
   display: flex;
